@@ -1,0 +1,239 @@
+<template>
+  <base-loading v-if="!show" />
+  <main v-else>
+    <section class="show">
+      <section class="show-info">
+        <h1 class="show-title">{{ show.title }}</h1>
+        <div class="show-image-container">
+          <div
+            class="feature-image"
+            :style="`background-image: url('${show.image.original}')`"
+          />
+        </div>
+        <span class="favorite-span">
+          <base-toggle
+            class="favorite"
+            :isFavorite="isFavorite"
+            @toggle="toggleFavorite"
+          />
+          <h4>{{ `${isFavorite ? 'Remove from' : 'Add to'} favorites` }}</h4>
+        </span>
+        <span class="genres-language">
+          <h4>Language: {{ show.language }}</h4>
+          <span v-if="show.network">
+            <h4>Premiered on: {{ show.premiered }}</h4>
+            <h4>{{ show.network.name }} {{ show.network.country.name }}</h4>
+            <h4>Status: {{ show.status }}</h4>
+          </span>
+          <h4>Genres: {{ genres }}</h4>
+        </span>
+        <summary v-html="show.summary"> </summary>
+      </section>
+    </section>
+    <section v-if="show.seasons.length" class="seasons">
+      <h3>{{ show.seasons.length }} Seasons</h3>
+      <ul class="seasons-list">
+        <li v-for="season in show.seasons" :key="season.id" class="season">
+          <div
+            class="feature-image"
+            :style="
+              `background-image: url('${(season.image && season.image.medium) ||
+                require('../../assets/default-poster.png')}')`
+            "
+          />
+          <h4>Season {{ season.number }}</h4>
+          <p>{{ season.episodeOrder }} Episodes</p>
+          <p>Premiered on: {{ season.premiereDate }}</p>
+        </li>
+      </ul>
+    </section>
+    <section v-if="show.cast.length" class="cast">
+      <h3>Cast Members</h3>
+      <ul class="cast-list">
+        <li v-for="member in show.cast" :key="member.person.id" class="member">
+          <div
+            class="feature-image"
+            :style="
+              `background-image: url('${(member.person.image &&
+                member.person.image.medium) ||
+                require('../../assets/default-profile.png')}')`
+            "
+          />
+          <h4>{{ member.person.name }}</h4>
+          <p>as {{ member.character.name }}</p>
+        </li>
+      </ul>
+    </section>
+  </main>
+</template>
+
+<script>
+import { useRoute } from 'vue-router'
+import { onBeforeMount, ref, computed, reactive } from 'vue'
+import { useStore } from 'vuex'
+import useFetchData from '../../hooks/useFetchData.js'
+import BaseLoading from '../UI/BaseLoading.vue'
+import BaseToggle from '../UI/BaseToggle.vue'
+import { createShowObject } from '../../functions/createDataObject.js'
+
+export default {
+  components: { BaseToggle, BaseLoading },
+  setup() {
+    const route = useRoute()
+    const show = ref(null)
+    const store = useStore()
+    const error = reactive({ display: false, message: 'An error has occurred' })
+
+    const genres = computed(() => {
+      return show.value.genres && show.value.genres.length
+        ? show.value.genres.join(', ')
+        : 'N/A'
+    })
+
+    const isFavorite = computed(() => {
+      return store.getters['favorites/getIsFavorite'](show.value.id)
+    })
+
+    function toggleFavorite() {
+      if (isFavorite.value) {
+        store.dispatch('favorites/removeFromFavorites', show.value.id)
+      } else {
+        store.dispatch('favorites/addToFavorites', show.value)
+      }
+    }
+
+    onBeforeMount(async () => {
+      const { status, data, err } = await useFetchData('show-by-id', {
+        showId: route.params.showId,
+      })
+      if (status === 'OK') {
+        show.value = createShowObject('show-page', data)
+        error.display = false
+      } else {
+        if (err) error.display = true
+      }
+    })
+
+    return { show, genres, isFavorite, toggleFavorite }
+  },
+}
+</script>
+
+<style scoped>
+.seasons,
+.cast,
+.show {
+  margin: 3rem auto;
+}
+
+.seasons-list,
+.cast-list {
+  width: 90vw;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem 0;
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  justify-content: flex-start;
+}
+
+.season,
+.member {
+  text-align: center;
+  margin: 0 1rem 0 0;
+}
+
+.favorite {
+  font-size: 2rem;
+}
+
+.feature-image {
+  width: 210px;
+  height: 295px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-bottom: 1rem;
+}
+
+.show-info {
+  text-align: center;
+}
+
+.member .feature-image {
+  height: 210px;
+  border-radius: 50%;
+}
+
+.show-image-container {
+  width: 100%;
+  padding-top: 140.47%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.26);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+.show-image-container .feature-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.favorite-span {
+  height: 100%;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.favorite-span h4 {
+  margin: 0;
+}
+
+.show-info {
+  width: 90vw;
+  max-width: var(--max-width);
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-gap: 1rem;
+}
+
+@media screen and (min-width: 820px) {
+  .show-info {
+    grid-template-columns: 1.4fr 2fr;
+    grid-template-rows: 1.5fr repeat(autofill, auto);
+    column-gap: 4rem;
+  }
+
+  .show-info summary {
+    height: 100%;
+
+    align-self: top;
+  }
+  .show-title {
+    grid-column: 1 / span 2;
+    margin-bottom: 3rem;
+  }
+
+  .show-image-container {
+    height: 100%;
+    align-self: top;
+    grid-row: 2 / span 2;
+  }
+  .favorite-span {
+    grid-column: 1;
+    grid-row: 4;
+  }
+}
+</style>
