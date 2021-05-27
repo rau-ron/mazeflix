@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 export default async function useFetchData(queryType, queryInputs) {
-  const api = Axios.create({ baseURL: 'http://api.tvmaze.com/' })
+  const api = Axios.create({ baseURL: 'https://api.tvmaze.com/' })
 
   let URL = ''
   switch (queryType) {
