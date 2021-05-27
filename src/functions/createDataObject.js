@@ -74,3 +74,11 @@ export function createFutureEpisodeObject(episode, showName, showId) {
     airstamp: episode.airstamp,
   }
 }
+
+export function createShowsArrayForResults(data) {
+  const showsArray = []
+  data.forEach((item) => {
+    showsArray.push(createShowObject('show-card', item.show))
+  })
+  return showsArray
+}
