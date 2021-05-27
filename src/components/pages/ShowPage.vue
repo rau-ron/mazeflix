@@ -212,10 +212,12 @@ export default {
 
 .favorite-span {
   height: 100%;
+  width: 100%;
   margin: 1rem;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 5px;
   font-size: 2rem;
 }
 

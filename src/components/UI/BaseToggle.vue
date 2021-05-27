@@ -33,11 +33,5 @@ export default {
 
 .favorite-toggle-label {
   font-size: 1rem;
-  margin-left: 0.2rem;
-}
-@media screen and (min-width: 820px) {
-  .favorite-toggle-label {
-    margin-left: 0;
-  }
 }
 </style>
