@@ -3,6 +3,7 @@
     <div class="search-box">
       <input
         type="text"
+        :class="{ 'with-logo': !queryInput }"
         @input="handleInputFieldSearch"
         @keyup.enter="handleSubmit"
         v-model="queryInput"
@@ -114,6 +115,15 @@ export default {
 @media screen and (max-width: 480px) {
   .search-box {
     width: 100%;
+  }
+  input.with-logo {
+    background-image: url('../../assets/mazeflix-logo-red.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40%;
+  }
+  input:focus {
+    background-image: none;
   }
 }
 </style>
