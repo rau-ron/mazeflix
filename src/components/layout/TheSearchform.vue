@@ -110,4 +110,10 @@ export default {
   color: var(--clr-neutral-2);
   font-size: 20px;
 }
+
+@media screen and (max-width: 480px) {
+  .search-box {
+    width: 100%;
+  }
+}
 </style>

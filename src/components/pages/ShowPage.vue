@@ -34,7 +34,9 @@
         </section>
       </section>
       <section v-if="show.seasons.length" class="seasons">
-        <h3>{{ show.seasons.length }} Seasons</h3>
+        <span class="list-header"
+          ><h3>{{ show.seasons.length }} Seasons</h3></span
+        >
         <ul class="seasons-list">
           <li v-for="season in show.seasons" :key="season.id" class="season">
             <div
@@ -52,7 +54,7 @@
         </ul>
       </section>
       <section v-if="show.cast.length" class="cast">
-        <h3>Cast Members</h3>
+        <span class="list-header"><h3>Cast Members</h3></span>
         <ul class="cast-list">
           <li
             v-for="member in show.cast"
@@ -145,6 +147,12 @@ export default {
 </script>
 
 <style scoped>
+main {
+  width: 100vw;
+}
+.show {
+  width: 90vw;
+}
 .seasons,
 .cast,
 .show {
@@ -153,7 +161,7 @@ export default {
 
 .seasons-list,
 .cast-list {
-  width: 90vw;
+  width: 100vw;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 1rem 0;
@@ -166,7 +174,18 @@ export default {
 .season,
 .member {
   text-align: center;
-  margin: 0 1rem 0 0;
+  margin: 0 0 0 1rem;
+}
+
+.season:first-child,
+.member:first-child {
+  margin-left: 0;
+}
+
+.list-header {
+  display: block;
+  width: 90vw;
+  margin: 0 auto;
 }
 
 .feature-image {
@@ -228,6 +247,13 @@ export default {
   justify-items: center;
   align-items: center;
   grid-gap: 1rem;
+}
+
+@media screen and (max-width: 1170px) {
+  .season:first-child,
+  .member:first-child {
+    margin-left: 5vw;
+  }
 }
 
 @media screen and (min-width: 820px) {

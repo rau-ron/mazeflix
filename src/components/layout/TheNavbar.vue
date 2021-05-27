@@ -159,7 +159,9 @@ export default {
   .nav-logo {
     display: none;
   }
+
   .search-center {
+    width: 90vw;
     margin: 0 auto;
   }
 }
