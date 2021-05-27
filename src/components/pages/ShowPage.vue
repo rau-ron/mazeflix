@@ -123,7 +123,6 @@ export default {
     }
 
     function handleFavoriteToggle() {
-      console.log(favoriteToggle.value)
       favoriteToggle.value.target.click()
     }
 

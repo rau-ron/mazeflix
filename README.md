@@ -24,6 +24,5 @@ npm run serve
 
 - Improve user feedback in case of API errors (e.g. network issues)
 - Add time zone management
-- Refactor API calls and move them into Vuex actions
 - Create reusable list component (for seasons, cast members)
 - Add some testing
