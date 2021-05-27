@@ -103,18 +103,28 @@ export default {
   height: 100%;
   display: grid;
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1.5fr 1fr;
+  grid-template-rows: 1.5fr 0.8fr;
   justify-content: center;
   align-items: center;
+  row-gap: 0.5rem;
 }
 .show-title {
+  width: 100%;
   grid-column: span 2;
-  justify-self: center;
+  justify-self: start;
   text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.show-title h4 {
+  margin-bottom: 0;
+}
+
+.show-genres {
+  align-self: end;
 }
 
 .show-genres > p {
@@ -129,7 +139,9 @@ export default {
 .toggle {
   grid-column: 2;
   grid-row: 2;
+  font-size: 1.3rem;
   justify-self: right;
+  align-self: end;
 }
 
 .show-card:hover .show-info {
@@ -143,6 +155,9 @@ export default {
 @media screen and (max-width: 479px) {
   .show-card .show-info {
     transform: translateY(0);
+  }
+  .show-info {
+    height: 25%;
   }
 }
 </style>
