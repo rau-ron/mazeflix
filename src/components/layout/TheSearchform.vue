@@ -43,7 +43,7 @@ export default {
       if (route.name !== 'search-results') {
         previousPage.value = route.fullPath
       }
-      store.dispatch('search/setSearchInput', queryInput.value)
+      store.dispatch('search/setSearch', queryInput.value)
       router.push({
         path: '/search-results',
         query: { q: queryInput.value },

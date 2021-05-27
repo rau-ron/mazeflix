@@ -13,14 +13,14 @@
               :style="`background-image: url('${show.image.original}')`"
             />
           </div>
-          <span class="favorite-span">
-            <base-toggle
-              class="favorite"
-              :isFavorite="isFavorite"
-              @toggle="toggleFavorite"
-            />
-            <h4>{{ `${isFavorite ? 'Remove from' : 'Add to'} favorites` }}</h4>
-          </span>
+
+          <base-toggle
+            :withLabel="true"
+            class="favorite-span"
+            :isFavorite="isFavorite"
+            @toggle="toggleFavorite"
+          />
+
           <span class="genres-language">
             <h4>Language: {{ show.language }}</h4>
             <span v-if="show.network">
@@ -78,21 +78,31 @@
 
 <script>
 import { useRoute } from 'vue-router'
-import { onBeforeMount, ref, computed, reactive } from 'vue'
+import { onBeforeMount, computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import useFetchData from '../../hooks/useFetchData.js'
+
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseToggle from '../UI/BaseToggle.vue'
 import BaseError from '../UI/BaseError.vue'
-import { createShowObject } from '../../functions/createDataObject.js'
 
 export default {
   components: { BaseToggle, BaseLoading, BaseError },
   setup() {
     const route = useRoute()
-    const show = ref(null)
     const store = useStore()
-    const error = reactive({ display: false, message: 'An error has occurred' })
+    const favoriteToggle = ref(null)
+
+    const isLoading = computed(() => {
+      return store.getters['getLoadingState']
+    })
+
+    const error = computed(() => {
+      return store.getters['getError']
+    })
+
+    const show = computed(() => {
+      return store.getters['shows/getShow']
+    })
 
     const genres = computed(() => {
       return show.value.genres && show.value.genres.length
@@ -112,19 +122,25 @@ export default {
       }
     }
 
-    onBeforeMount(async () => {
-      const { status, data, err } = await useFetchData('show-by-id', {
-        showId: route.params.showId,
-      })
-      if (status === 'OK') {
-        show.value = createShowObject('show-page', data)
-        error.display = false
-      } else {
-        if (err) error.display = true
-      }
+    function handleFavoriteToggle() {
+      console.log(favoriteToggle.value)
+      favoriteToggle.value.target.click()
+    }
+
+    onBeforeMount(() => {
+      store.dispatch('shows/fetchShow', route.params.showId)
     })
 
-    return { error, show, genres, isFavorite, toggleFavorite }
+    return {
+      isLoading,
+      error,
+      show,
+      genres,
+      isFavorite,
+      toggleFavorite,
+      handleFavoriteToggle,
+      favoriteToggle,
+    }
   },
 }
 </script>
@@ -152,10 +168,6 @@ export default {
 .member {
   text-align: center;
   margin: 0 1rem 0 0;
-}
-
-.favorite {
-  font-size: 2rem;
 }
 
 .feature-image {
@@ -205,9 +217,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.favorite-span h4 {
-  margin: 0;
+  font-size: 2rem;
 }
 
 .show-info {

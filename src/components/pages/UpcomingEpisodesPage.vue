@@ -11,7 +11,7 @@
       </section>
       <section v-else>
         <base-episode-card
-          v-for="episode in futureEpisodes"
+          v-for="episode in upcomingEpisodes"
           :key="episode.id"
           :episode="episode"
         ></base-episode-card>
@@ -21,66 +21,43 @@
 </template>
 
 <script>
-import { onMounted, ref, computed, reactive } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseEpisodeCard from '../UI/BaseEpisodeCard.vue'
 import BaseError from '../UI/BaseError.vue'
-import useFetchData from '../../hooks/useFetchData.js'
-import {
-  filterFutureEpisodes,
-  compareEpisodeDate,
-} from '../../functions/filterAndSortEpisodes.js'
 
 export default {
   components: { BaseLoading, BaseEpisodeCard, BaseError },
   setup() {
     const store = useStore()
-    const futureEpisodes = ref(null)
-    const isLoading = ref(false)
-    const error = reactive({ display: false, message: 'An error has occurred' })
-    const noEpisodes = computed(() => {
-      return !futureEpisodes.value || !futureEpisodes.value.length
+    const favoriteShows = ref(null)
+
+    const isLoading = computed(() => {
+      return store.getters['getLoadingState']
     })
 
-    onMounted(async () => {
+    const error = computed(() => {
+      return store.getters['getError']
+    })
+
+    const upcomingEpisodes = computed(() => {
+      return store.getters['shows/getUpcomingEpisodes']
+    })
+
+    const noEpisodes = computed(() => {
+      return !upcomingEpisodes.value || !upcomingEpisodes.value.length
+    })
+
+    onMounted(() => {
       if (localStorage.favoriteShows) {
         store.dispatch('favorites/loadFavoritesFromLocalStorage')
       }
-
-      const favoriteShows = store.getters['favorites/getFavoriteShows']
-      futureEpisodes.value = []
-
-      if (favoriteShows.length) {
-        isLoading.value = true
-
-        for (const show of favoriteShows) {
-          const {
-            status,
-            data,
-            err,
-          } = await useFetchData('upcoming-episodes-by-id', { showId: show.id })
-
-          if (status === 'OK') {
-            const filteredEpisodes = filterFutureEpisodes(data)
-            filteredEpisodes.forEach((episode) =>
-              futureEpisodes.value.push(episode)
-            )
-            error.display = false
-          } else if (err) {
-            error.display = true
-          }
-        }
-
-        futureEpisodes.value.sort((episodeA, episodeB) => {
-          return compareEpisodeDate(episodeA, episodeB)
-        })
-
-        isLoading.value = false
-      }
+      favoriteShows.value = store.getters['favorites/getFavoriteShows']
+      store.dispatch('shows/fetchUpcomingEpisodes', favoriteShows.value)
     })
 
-    return { futureEpisodes, error, isLoading, noEpisodes }
+    return { upcomingEpisodes, error, isLoading, noEpisodes }
   },
 }
 </script>

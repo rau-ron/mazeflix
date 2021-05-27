@@ -16,6 +16,7 @@
             ><p>{{ genres }}</p></span
           >
           <base-toggle
+            :withLabel="false"
             :isFavorite="isFavorite"
             @toggle="toggleFavorite"
             class="toggle"

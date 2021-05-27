@@ -21,14 +21,12 @@
   </div>
 </template>
 <script>
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseShowCard from '../UI/BaseShowCard.vue'
 import BaseError from '../UI/BaseError.vue'
-import useFetchData from '../../hooks/useFetchData.js'
-import { createShowObject } from '../../functions/createDataObject.js'
 
 export default {
   components: { BaseShowCard, BaseLoading, BaseError },
@@ -37,61 +35,24 @@ export default {
     const route = useRoute()
 
     const isLoading = computed(() => {
-      return store.getters['search/getLoadingState']
+      return store.getters['getLoadingState']
     })
-
     const error = computed(() => {
-      return store.getters['search/getSearchError']
+      return store.getters['getError']
     })
-
-    const noMatches = computed(() => {
-      return store.getters['search/getNoMatches']
-    })
-
     const searchInput = computed(() => {
       return store.getters['search/getSearchInput']
     })
-
     const shows = computed(() => {
       return store.getters['search/getShowsResults']
     })
-
-    watch(searchInput, async () => {
-      await search(searchInput.value)
+    const noMatches = computed(() => {
+      return shows.value && shows.value.length === 0
     })
 
-    async function search(query) {
-      if (query) {
-        store.dispatch('search/setSearchLoading', true)
-        store.dispatch('search/clearShowsResults')
-        const { status, data, err } = await useFetchData('shows-query', {
-          inputText: query,
-        })
-        if (status === 'OK') {
-          store.dispatch('search/setShowsResults', createShowsArray(data))
-        } else {
-          err &&
-            store.dispatch('search/setSearchError', {
-              display: true,
-              message: 'An error has occurred',
-            })
-        }
-        store.dispatch('search/setSearchLoading', false)
-      }
-    }
-
-    function createShowsArray(data) {
-      const showsArray = []
-      data.forEach((item) => {
-        showsArray.push(createShowObject('show-card', item.show))
-      })
-      return showsArray
-    }
-
-    onMounted(async () => {
+    onMounted(() => {
       if (route.query && route.query.q) {
-        store.dispatch('search/setSearchInput', route.query.q)
-        await search(route.query.q)
+        store.dispatch('search/setSearch', route.query.q)
       }
     })
 

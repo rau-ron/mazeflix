@@ -47,46 +47,36 @@
 </template>
 
 <script>
-import { onMounted, ref, watch, reactive } from 'vue'
-import useFetchData from '../../hooks/useFetchData.js'
+import { onMounted, ref, computed, watch } from 'vue'
+import { useStore } from 'vuex'
 import BaseShowCard from '../UI/BaseShowCard.vue'
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseError from '../UI/BaseError.vue'
-import { filterEpisodesByAirtime } from '../../functions/filterAndSortEpisodes.js'
 
 export default {
   components: { BaseShowCard, BaseLoading, BaseError },
   setup() {
+    const store = useStore()
     const countrySelected = ref('US')
-    const episodesAiringToday = ref(null)
-    const isLoading = ref('false')
-    const error = reactive({ display: false, message: 'An error has occurred' })
 
-    async function getEpisodesForToday() {
-      const today = new Date()
-      isLoading.value = true
-      const { status, data: allEpisodesToday, err } = await useFetchData(
-        'shows-airing-today',
-        {
-          country: countrySelected.value,
-          date: today.toISOString().slice(0, 10),
-        }
-      )
-      isLoading.value = false
-      if (status === 'OK') {
-        episodesAiringToday.value = filterEpisodesByAirtime(allEpisodesToday)
-        error.display = false
-      } else {
-        if (err) error.display = true
-      }
-    }
-
-    watch(countrySelected, async () => {
-      getEpisodesForToday()
+    const isLoading = computed(() => {
+      return store.getters['getLoadingState']
     })
 
-    onMounted(async () => {
-      await getEpisodesForToday()
+    const error = computed(() => {
+      return store.getters['getError']
+    })
+
+    const episodesAiringToday = computed(() => {
+      return store.getters['shows/getTodayEpisodes']
+    })
+
+    watch(countrySelected, async () => {
+      store.dispatch('shows/fetchTodayEpisodes', countrySelected.value)
+    })
+
+    onMounted(() => {
+      store.dispatch('shows/fetchTodayEpisodes', countrySelected.value)
     })
 
     return { episodesAiringToday, countrySelected, isLoading, error }

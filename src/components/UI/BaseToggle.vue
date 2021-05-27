@@ -1,14 +1,19 @@
 <template>
-  <fa
-    class="favorite-toggle"
-    @click="handleToggle"
-    :icon="isFavorite ? ['fas', 'star'] : ['far', 'star']"
-  />
+  <div>
+    <fa
+      class="favorite-toggle"
+      @click="handleToggle"
+      :icon="isFavorite ? ['fas', 'star'] : ['far', 'star']"
+    />
+    <span v-if="withLabel" @click="handleToggle" class="favorite-toggle-label">
+      {{ `${isFavorite ? 'Remove from' : 'Add to'} favorites` }}
+    </span>
+  </div>
 </template>
 
 <script>
 export default {
-  props: ['isFavorite'],
+  props: ['isFavorite', 'withLabel'],
   emits: ['toggle'],
   setup(props, context) {
     function handleToggle() {
@@ -21,7 +26,12 @@ export default {
 </script>
 
 <style scoped>
-.favorite-toggle {
+.favorite-toggle,
+.favorite-toggle-label {
   cursor: pointer;
+}
+
+.favorite-toggle-label {
+  font-size: 1rem;
 }
 </style>
