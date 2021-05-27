@@ -254,6 +254,9 @@ main {
   .member:first-child {
     margin-left: 5vw;
   }
+  .list-header {
+    margin-left: 5vw;
+  }
 }
 
 @media screen and (min-width: 820px) {
@@ -265,7 +268,6 @@ main {
 
   .show-info summary {
     height: 100%;
-
     align-self: top;
   }
   .show-title {
