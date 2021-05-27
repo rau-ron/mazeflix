@@ -64,7 +64,7 @@ export default {
 
 <style scoped>
 .menu-top {
-  width: 100%;
+  width: 100vw;
   position: fixed;
   top: 0;
   left: 0;
@@ -94,9 +94,11 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .nav-links li {
   margin: 0 0.5rem;
 }
+
 .nav-links a {
   color: var(--clr-neutral-3);
   font-size: 1rem;

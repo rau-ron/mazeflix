@@ -152,6 +152,7 @@ main {
 }
 .show {
   width: 90vw;
+  max-width: var(--max-width);
 }
 .seasons,
 .cast,
@@ -184,7 +185,6 @@ main {
 
 .list-header {
   display: block;
-  width: 90vw;
   margin: 0 auto;
 }
 
