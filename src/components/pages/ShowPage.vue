@@ -1,70 +1,79 @@
 <template>
-  <base-loading v-if="!show" />
-  <main v-else>
-    <section class="show">
-      <section class="show-info">
-        <h1 class="show-title">{{ show.title }}</h1>
-        <div class="show-image-container">
-          <div
-            class="feature-image"
-            :style="`background-image: url('${show.image.original}')`"
-          />
-        </div>
-        <span class="favorite-span">
-          <base-toggle
-            class="favorite"
-            :isFavorite="isFavorite"
-            @toggle="toggleFavorite"
-          />
-          <h4>{{ `${isFavorite ? 'Remove from' : 'Add to'} favorites` }}</h4>
-        </span>
-        <span class="genres-language">
-          <h4>Language: {{ show.language }}</h4>
-          <span v-if="show.network">
-            <h4>Premiered on: {{ show.premiered }}</h4>
-            <h4>{{ show.network.name }} {{ show.network.country.name }}</h4>
-            <h4>Status: {{ show.status }}</h4>
+  <div>
+    <base-loading v-if="!show" />
+    <base-error v-else-if="error.display" :error="error" />
+
+    <main v-else>
+      <section class="show">
+        <section class="show-info">
+          <h1 class="show-title">{{ show.title }}</h1>
+          <div class="show-image-container">
+            <div
+              class="feature-image"
+              :style="`background-image: url('${show.image.original}')`"
+            />
+          </div>
+          <span class="favorite-span">
+            <base-toggle
+              class="favorite"
+              :isFavorite="isFavorite"
+              @toggle="toggleFavorite"
+            />
+            <h4>{{ `${isFavorite ? 'Remove from' : 'Add to'} favorites` }}</h4>
           </span>
-          <h4>Genres: {{ genres }}</h4>
-        </span>
-        <summary v-html="show.summary"> </summary>
+          <span class="genres-language">
+            <h4>Language: {{ show.language }}</h4>
+            <span v-if="show.network">
+              <h4>Premiered on: {{ show.premiered }}</h4>
+              <h4>{{ show.network.name }} {{ show.network.country.name }}</h4>
+              <h4>Status: {{ show.status }}</h4>
+            </span>
+            <h4>Genres: {{ genres }}</h4>
+          </span>
+          <summary v-html="show.summary"> </summary>
+        </section>
       </section>
-    </section>
-    <section v-if="show.seasons.length" class="seasons">
-      <h3>{{ show.seasons.length }} Seasons</h3>
-      <ul class="seasons-list">
-        <li v-for="season in show.seasons" :key="season.id" class="season">
-          <div
-            class="feature-image"
-            :style="
-              `background-image: url('${(season.image && season.image.medium) ||
-                require('../../assets/default-poster.png')}')`
-            "
-          />
-          <h4>Season {{ season.number }}</h4>
-          <p>{{ season.episodeOrder }} Episodes</p>
-          <p>Premiered on: {{ season.premiereDate }}</p>
-        </li>
-      </ul>
-    </section>
-    <section v-if="show.cast.length" class="cast">
-      <h3>Cast Members</h3>
-      <ul class="cast-list">
-        <li v-for="member in show.cast" :key="member.person.id" class="member">
-          <div
-            class="feature-image"
-            :style="
-              `background-image: url('${(member.person.image &&
-                member.person.image.medium) ||
-                require('../../assets/default-profile.png')}')`
-            "
-          />
-          <h4>{{ member.person.name }}</h4>
-          <p>as {{ member.character.name }}</p>
-        </li>
-      </ul>
-    </section>
-  </main>
+      <section v-if="show.seasons.length" class="seasons">
+        <h3>{{ show.seasons.length }} Seasons</h3>
+        <ul class="seasons-list">
+          <li v-for="season in show.seasons" :key="season.id" class="season">
+            <div
+              class="feature-image"
+              :style="
+                `background-image: url('${(season.image &&
+                  season.image.medium) ||
+                  require('../../assets/default-poster.png')}')`
+              "
+            />
+            <h4>Season {{ season.number }}</h4>
+            <p>{{ season.episodeOrder }} Episodes</p>
+            <p>Premiered on: {{ season.premiereDate }}</p>
+          </li>
+        </ul>
+      </section>
+      <section v-if="show.cast.length" class="cast">
+        <h3>Cast Members</h3>
+        <ul class="cast-list">
+          <li
+            v-for="member in show.cast"
+            :key="member.person.id"
+            class="member"
+          >
+            <div
+              class="feature-image"
+              :style="
+                `background-image: url('${(member.person.image &&
+                  member.person.image.medium) ||
+                  require('../../assets/default-profile.png')}')`
+              "
+            />
+            <h4>{{ member.person.name }}</h4>
+            <p>as {{ member.character.name }}</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
 </template>
 
 <script>
@@ -74,10 +83,11 @@ import { useStore } from 'vuex'
 import useFetchData from '../../hooks/useFetchData.js'
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseToggle from '../UI/BaseToggle.vue'
+import BaseError from '../UI/BaseError.vue'
 import { createShowObject } from '../../functions/createDataObject.js'
 
 export default {
-  components: { BaseToggle, BaseLoading },
+  components: { BaseToggle, BaseLoading, BaseError },
   setup() {
     const route = useRoute()
     const show = ref(null)
@@ -114,7 +124,7 @@ export default {
       }
     })
 
-    return { show, genres, isFavorite, toggleFavorite }
+    return { error, show, genres, isFavorite, toggleFavorite }
   },
 }
 </script>

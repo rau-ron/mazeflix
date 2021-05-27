@@ -1,22 +1,24 @@
 <template>
-  <main>
-    <h2 v-if="error.display">{{ error.message }}</h2>
-    <header>
-      <h1>Search</h1>
-    </header>
-    <section v-if="searchInput" class="sub-header">
-      <h4>“{{ searchInput }}”</h4>
-    </section>
-    <base-loading v-if="isLoading" />
-    <section v-else-if="noMatches" class="sub-header">
-      <h3>No Results</h3>
-    </section>
-    <section v-else class="shows">
-      <section class="shows-center">
-        <base-show-card v-for="show in shows" :key="show.id" :show="show" />
+  <div>
+    <base-error v-if="error.display" :error="error" />
+    <main v-else>
+      <header>
+        <h1>Search</h1>
+      </header>
+      <section v-if="searchInput" class="sub-header">
+        <h4>“{{ searchInput }}”</h4>
       </section>
-    </section>
-  </main>
+      <base-loading v-if="isLoading" />
+      <section v-else-if="noMatches" class="sub-header">
+        <h3>No Results</h3>
+      </section>
+      <section v-else class="shows">
+        <section class="shows-center">
+          <base-show-card v-for="show in shows" :key="show.id" :show="show" />
+        </section>
+      </section>
+    </main>
+  </div>
 </template>
 <script>
 import { computed, onMounted, watch } from 'vue'
@@ -24,11 +26,12 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseShowCard from '../UI/BaseShowCard.vue'
+import BaseError from '../UI/BaseError.vue'
 import useFetchData from '../../hooks/useFetchData.js'
 import { createShowObject } from '../../functions/createDataObject.js'
 
 export default {
-  components: { BaseShowCard, BaseLoading },
+  components: { BaseShowCard, BaseLoading, BaseError },
   setup() {
     const store = useStore()
     const route = useRoute()

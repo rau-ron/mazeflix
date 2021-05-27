@@ -1,21 +1,23 @@
 <template>
-  <div v-if="error.display">{{ error.message }}</div>
-  <main v-else>
-    <header>
-      <h1>Upcoming Episodes</h1>
-    </header>
-    <base-loading v-if="isLoading" />
-    <section v-else-if="noEpisodes" class="sub-header">
-      <h3>No upcoming episodes</h3>
-    </section>
-    <section v-else>
-      <base-episode-card
-        v-for="episode in futureEpisodes"
-        :key="episode.id"
-        :episode="episode"
-      ></base-episode-card>
-    </section>
-  </main>
+  <div>
+    <base-error v-if="error.display" :error="error" />
+    <main v-else>
+      <header>
+        <h1>Upcoming Episodes</h1>
+      </header>
+      <base-loading v-if="isLoading" />
+      <section v-else-if="noEpisodes" class="sub-header">
+        <h3>No upcoming episodes</h3>
+      </section>
+      <section v-else>
+        <base-episode-card
+          v-for="episode in futureEpisodes"
+          :key="episode.id"
+          :episode="episode"
+        ></base-episode-card>
+      </section>
+    </main>
+  </div>
 </template>
 
 <script>
@@ -23,6 +25,7 @@ import { onMounted, ref, computed, reactive } from 'vue'
 import { useStore } from 'vuex'
 import BaseLoading from '../UI/BaseLoading.vue'
 import BaseEpisodeCard from '../UI/BaseEpisodeCard.vue'
+import BaseError from '../UI/BaseError.vue'
 import useFetchData from '../../hooks/useFetchData.js'
 import {
   filterFutureEpisodes,
@@ -30,7 +33,7 @@ import {
 } from '../../functions/filterAndSortEpisodes.js'
 
 export default {
-  components: { BaseLoading, BaseEpisodeCard },
+  components: { BaseLoading, BaseEpisodeCard, BaseError },
   setup() {
     const store = useStore()
     const futureEpisodes = ref(null)

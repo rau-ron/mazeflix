@@ -25,10 +25,15 @@ export default async function useFetchData(queryType, queryInputs) {
   if (URL) {
     try {
       const response = await api.get(URL)
-      if (response.statusText === 'OK') {
+      console.log(response)
+      if (response.status === 200) {
         return { status: 'OK', data: response.data, err: null }
       } else {
-        return { status: 'FAILED', data: null, err: null }
+        return {
+          status: 'FAILED',
+          data: null,
+          err: { response: response, message: response.statusText },
+        }
       }
     } catch (error) {
       return { status: 'ERROR', data: null, err: error }
