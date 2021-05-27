@@ -249,7 +249,7 @@ main {
   grid-gap: 1rem;
 }
 
-@media screen and (max-width: 1170px) {
+@media screen and (max-width: 1300px) {
   .season:first-child,
   .member:first-child {
     margin-left: 5vw;
