@@ -217,7 +217,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 5px;
   font-size: 2rem;
 }
 
