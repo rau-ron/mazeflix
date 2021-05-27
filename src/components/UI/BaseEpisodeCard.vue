@@ -1,7 +1,10 @@
 <template>
   <article class="episode">
     <header class="episode-header">
-      <h3>{{ episode.airdate }} • {{ episode.airtime }}</h3>
+      <h3>
+        {{ episode.airdate }} {{ episode.airdate && episode.airtime && '•' }}
+        {{ episode.airtime }}
+      </h3>
     </header>
     <section class="episode-info">
       <router-link :to="`/shows/${episode.showId}`"
