@@ -33,5 +33,6 @@ export default {
 
 .favorite-toggle-label {
   font-size: 1rem;
+  margin-left: 0.2rem;
 }
 </style>
