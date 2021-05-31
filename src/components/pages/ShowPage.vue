@@ -47,8 +47,8 @@
                   require('../../assets/default-poster.png')}')`
               "
             />
-            <h4>Season {{ season.number }}</h4>
-            <p>{{ season.episodeOrder }} Episodes</p>
+            <h4 v-if="season.number">Season {{ season.number }}</h4>
+            <p v-if="season.episodeOrder">{{ season.episodeOrder }} Episodes</p>
             <p>Premiered on: {{ season.premiereDate }}</p>
           </li>
         </ul>
@@ -249,7 +249,7 @@ main {
   grid-gap: 1rem;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1170px) {
   .season:first-child,
   .member:first-child {
     margin-left: 5vw;
