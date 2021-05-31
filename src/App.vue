@@ -106,7 +106,7 @@ select {
   font-size: inherit;
 }
 
-@media screen and (min-width: 480px) {
+@media screen and (min-width: 481px) {
   h1 {
     font-size: 3rem;
   }
