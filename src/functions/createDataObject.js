@@ -1,9 +1,9 @@
 export function createShowObject(type, show) {
   if (type === 'show-card') {
     return {
-      id: show.id,
-      title: show.name,
-      genres: show.genres,
+      id: show.id || '',
+      title: show.name || '',
+      genres: show.genres || [],
       image: {
         medium:
           (show.image && show.image.medium) ||
@@ -15,8 +15,8 @@ export function createShowObject(type, show) {
     }
   } else if (type === 'show-page') {
     return {
-      id: show.id,
-      title: show.name,
+      id: show.id || '',
+      title: show.name || '',
       image: {
         medium:
           (show.image && show.image.medium) ||
@@ -25,12 +25,12 @@ export function createShowObject(type, show) {
           (show.image && show.image.original) ||
           require('../assets/default-poster.png'),
       },
-      summary: show.summary,
-      genres: show.genres,
+      summary: show.summary || '',
+      genres: show.genres || [],
       network: show.network || null,
-      language: show.language,
-      premiered: show.premiered,
-      status: show.status,
+      language: show.language || '',
+      premiered: show.premiered || '',
+      status: show.status || '',
       cast: show._embedded.cast || [],
       seasons: show._embedded.seasons || [],
     }
@@ -39,15 +39,15 @@ export function createShowObject(type, show) {
 
 export function createEpisodeObject(episode) {
   return {
-    id: episode.id,
-    title: episode.name,
-    number: episode.number,
-    season: episode.season,
-    airtime: episode.airtime,
-    airstamp: episode.airstamp,
+    id: episode.id || '',
+    title: episode.name || '',
+    number: episode.number || '',
+    season: episode.season || '',
+    airtime: episode.airtime || '',
+    airstamp: episode.airstamp || '',
     show: {
-      id: episode.show.id,
-      title: episode.show.name,
+      id: episode.show.id || '',
+      title: episode.show.name || '',
       image: {
         medium:
           (episode.show.image && episode.show.image.medium) ||
@@ -63,15 +63,15 @@ export function createEpisodeObject(episode) {
 
 export function createFutureEpisodeObject(episode, showName, showId) {
   return {
-    id: episode.id,
-    showId: showId,
-    showName: showName,
-    title: episode.name,
-    season: episode.season,
-    number: episode.number,
-    airdate: episode.airdate,
-    airtime: episode.airtime,
-    airstamp: episode.airstamp,
+    id: episode.id || '',
+    showId: showId || '',
+    showName: showName || '',
+    title: episode.name || '',
+    season: episode.season || '',
+    number: episode.number || '',
+    airdate: episode.airdate || '',
+    airtime: episode.airtime || '',
+    airstamp: episode.airstamp || '',
   }
 }
 

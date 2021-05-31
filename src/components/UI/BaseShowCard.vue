@@ -152,7 +152,7 @@ export default {
   transform: scale(1.02);
 }
 
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 480px) {
   .show-card .show-info {
     transform: translateY(0);
   }

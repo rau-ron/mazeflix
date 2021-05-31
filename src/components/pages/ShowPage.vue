@@ -1,4 +1,4 @@
-o<template>
+<template>
   <div>
     <base-loading v-if="!show" />
     <base-error v-else-if="error.display" :error="error" />
@@ -56,11 +56,11 @@ o<template>
       <section v-if="show.cast.length" class="cast">
         <span class="list-header"><h3>Cast Members</h3></span>
         <ul class="cast-list">
-m          ="member"
-          ><li
+          <li
             v-for="member in show.cast"
             :key="member.person.id"
-            class
+            class="member"
+          >
             <div
               class="feature-image"
               :style="
@@ -175,17 +175,17 @@ main {
 .season,
 .member {
   text-align: center;
-  padding: 0 1rem 0 0;
+  margin: 0 0 0 1rem;
 }
 
 .season:first-child,
 .member:first-child {
-  margin-left: 5vw;
+  margin-left: 0;
 }
 
 .list-header {
   display: block;
-  margin-left: 5vw;
+  margin: 0 auto;
 }
 
 .feature-image {
@@ -249,7 +249,17 @@ main {
   grid-gap: 1rem;
 }
 
-@media screen and (min-width: 821px) {
+@media screen and (max-width: 1170px) {
+  .season:first-child,
+  .member:first-child {
+    margin-left: 5vw;
+  }
+  .list-header {
+    margin-left: 5vw;
+  }
+}
+
+@media screen and (min-width: 820px) {
   .show-info {
     grid-template-columns: 1.4fr 2fr;
     grid-template-rows: 1.5fr repeat(autofill, auto);
@@ -260,7 +270,6 @@ main {
     height: 100%;
     align-self: top;
   }
-
   .show-title {
     grid-column: 1 / span 2;
     margin-bottom: 3rem;
@@ -271,36 +280,9 @@ main {
     align-self: top;
     grid-row: 2 / span 2;
   }
-
   .favorite-span {
     grid-column: 1;
     grid-row: 4;
-  }
-
-  .seasons-list,
-  .cast-list,
-  .list-header {
-    width: 100vw;
-    padding-left: 5vw;
-    max-width: var(--max-width);
-  }
-
-  .season:first-child,
-  .member:first-child {
-    margin-left: 0;
-  }
-
-  .list-header {
-    margin: 0 auto;
-  }
-}
-
-@media screen and (min-width: 1170px) {
-  .seasons-list,
-  .cast-list,
-  .list-header {
-    width: 90vw;
-    padding-left: 0;
   }
 }
 </style>
