@@ -34,5 +34,5 @@ export function filterFutureEpisodes(data) {
 export function compareEpisodeDate(episodeA, episodeB) {
   const dateA = new Date(episodeA.airstamp)
   const dateB = new Date(episodeB.airstamp)
-  return dateA.getTime() > dateB.getTime()
+  return dateA.getTime() > dateB.getTime() ? 1 : -1
 }

@@ -15,6 +15,7 @@ export default {
       show: null,
     }
   },
+
   mutations: {
     SET_UPCOMING_EPISODES(state, payload) {
       state.upcomingEpisodes = payload
@@ -107,15 +108,16 @@ export default {
             )
           }
         }
-
-        futureEpisodes.sort((episodeA, episodeB) => {
-          return compareEpisodeDate(episodeA, episodeB)
-        })
-
-        context.commit('SET_UPCOMING_EPISODES', futureEpisodes)
+        context.commit(
+          'SET_UPCOMING_EPISODES',
+          futureEpisodes.sort((episodeA, episodeB) => {
+            return compareEpisodeDate(episodeA, episodeB)
+          })
+        )
         context.dispatch('setLoadingState', false, { root: true })
       }
     },
+
     async fetchShow(context, payload) {
       context.dispatch(
         'setError',
@@ -143,6 +145,7 @@ export default {
       context.dispatch('setLoadingState', false, { root: true })
     },
   },
+
   getters: {
     getTodayEpisodes(state) {
       return state.todayEpisodes
