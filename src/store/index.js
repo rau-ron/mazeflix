@@ -23,7 +23,7 @@ export default createStore({
       state.isLoading = payload
     },
     SET_ERROR(state, payload) {
-      state.error.display = payload.dislay
+      state.error.display = payload.display
       state.error.message = payload.message
     },
   },

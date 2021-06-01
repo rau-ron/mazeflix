@@ -4,7 +4,7 @@ import Favorites from '../components/pages/FavoritesPage.vue'
 import UpcomingEpisodes from '../components/pages/UpcomingEpisodesPage.vue'
 import SearchResults from '../components/pages/SearchResultsPage.vue'
 import Show from '../components/pages/ShowPage.vue'
-import NotFoundPage from '../components/pages/NotFoundPage.vue'
+import NotFound from '../components/pages/NotFoundPage.vue'
 
 const routes = [
   {
@@ -35,7 +35,7 @@ const routes = [
   {
     path: '/:catchAll(.*)',
     name: 'not-found',
-    component: NotFoundPage,
+    component: NotFound,
   },
 ]
 

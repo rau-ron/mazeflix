@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-loading v-if="!show" />
+    <base-loading v-if="isLoading" />
     <base-error v-else-if="error.display" :error="error" />
 
     <main v-else>
